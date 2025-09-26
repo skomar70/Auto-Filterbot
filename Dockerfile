@@ -12,8 +12,8 @@ COPY requirements.txt /requirements.txt
 RUN pip install --upgrade pip && pip install --upgrade -r /requirements.txt
 
 # Create working directory
-RUN mkdir /AutoFilterAdvance
-WORKDIR /AutoFilterAdvance
+RUN mkdir /Auto-filterbot
+WORKDIR /Auto-filterbot
 
 # Copy start script
 COPY start.sh /start.sh
