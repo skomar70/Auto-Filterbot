@@ -1,6 +1,6 @@
 FROM python:3.8-slim-buster
 
-# Fix Buster repository: use archive.debian.org
+# Fix old Debian repository
 RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /etc/apt/sources.list \
     && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until \
     && apt-get update \
@@ -9,19 +9,18 @@ RUN sed -i 's|http://deb.debian.org/debian|http://archive.debian.org/debian|g' /
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements file
+# Copy requirements and install dependencies
 COPY requirements.txt /requirements.txt
-
-# Upgrade pip and install dependencies
 RUN pip3 install --upgrade pip \
     && pip3 install --upgrade -r /requirements.txt
 
-# Create working directory
-RUN mkdir /Auto-filterbot
+# Set working directory and clone repo
 WORKDIR /Auto-filterbot
+RUN git clone https://github.com/skomar70/Auto-filterbot.git /Auto-filterbot
 
 # Copy start script
 COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Set default command
+# Run the bot on container start
 CMD ["/bin/bash", "/start.sh"]
