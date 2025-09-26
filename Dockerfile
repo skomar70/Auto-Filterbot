@@ -1,23 +1,20 @@
-FROM python:3.8-slim-buster
+FROM python:3.10-slim
 
-# Avoid interactive prompts, update package lists, fix missing dependencies, upgrade safely
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends git && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# Avoid warnings by setting noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Copy requirements first to leverage Docker cache
-COPY requirements.txt /requirements.txt
+# Update package lists and install git safely
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git curl wget \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip and install python dependencies
-RUN pip install --upgrade pip && pip install --upgrade -r /requirements.txt
+WORKDIR /app
 
-# Create working directory
-RUN mkdir /Auto-filterbot
-WORKDIR /Auto-filterbot
+COPY requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Copy start script
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
+COPY . .
 
-# Default command
-CMD ["/bin/bash", "/start.sh"]
+CMD ["python", "app.py"]
