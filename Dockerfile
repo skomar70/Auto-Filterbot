@@ -1,18 +1,12 @@
-# Base image
 FROM python:3.8-slim-buster
 
-# Install git safely and clean cache
-RUN apt-get update -o Acquire::CompressionTypes::Order::=gz && \
-    apt-get install -y --no-install-recommends git ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt update && apt upgrade -y
+RUN apt install git -y
+COPY requirements.txt /requirements.txt
 
-# Copy start script
+RUN cd /
+RUN pip3 install -U pip && pip3 install -U -r requirements.txt
+RUN mkdir /AutoFilterAdvance
+WORKDIR /AutoFilterAdvance
 COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-# Set working directory
-RUN mkdir /Auto-filterbot
-WORKDIR /Auto-filterbot
-
-# Default command
 CMD ["/bin/bash", "/start.sh"]
