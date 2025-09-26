@@ -1,11 +1,18 @@
-FROM python:3.10-slim-bullseye
+# Base image
+FROM python:3.8-slim-buster
 
-WORKDIR /app
+# Install git safely and clean cache
+RUN apt-get update -o Acquire::CompressionTypes::Order::=gz && \
+    apt-get install -y --no-install-recommends git ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
-COPY . .
+# Copy start script
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
-RUN pip install --no-cache-dir -U -r requirements.txt
-RUN chmod +x start.sh
+# Set working directory
+RUN mkdir /Auto-filterbot
+WORKDIR /Auto-filterbot
 
-CMD ["./start.sh"]
+# Default command
+CMD ["/bin/bash", "/start.sh"]
