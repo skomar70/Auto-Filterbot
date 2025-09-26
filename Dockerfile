@@ -1,23 +1,11 @@
-# Base image
-FROM python:3.8-slim-buster
+FROM python:3.10-slim-bullseye
 
-# Avoid broken apt repositories, install git safely
-RUN apt-get update -o Acquire::CompressionTypes::Order::=gz && \
-    apt-get install -y --no-install-recommends git ca-certificates && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-# Copy requirements file
-COPY requirements.txt /requirements.txt
+COPY . .
 
-# Upgrade pip and install dependencies
-RUN pip3 install --upgrade pip && pip3 install --upgrade -r /requirements.txt
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
+RUN pip install --no-cache-dir -U -r requirements.txt
+RUN chmod +x start.sh
 
-# Create working directory
-RUN mkdir /Auto-filterbot
-WORKDIR /Auto-filterbot
-
-# Copy start script
-COPY start.sh /start.sh
-
-# Set default command
-CMD ["/bin/bash", "/start.sh"]
+CMD ["./start.sh"]
