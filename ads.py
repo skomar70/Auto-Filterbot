@@ -1,11 +1,10 @@
-# ads.py
-import json
+ import json
 import time
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 # ---------------- Admin ID ----------------
-ADMIN_ID = 123456789  # আপনার Telegram ID
+ADMIN_ID = 8248792819  # আপনার Telegram ID
 
 # ---------------- Configuration ----------------
 DATA_FILE = "bot_data.json"
