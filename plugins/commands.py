@@ -25,7 +25,7 @@ async def start(client, message):
         buttons = [
             [
                 InlineKeyboardButton("Winner Group", url="https://t.me/VJ_Bots"),
-                InlineKeyboardButton("🍿 YouTube Channel 🍿", url="https://youtube.com/@Tech_VJ")
+                InlineKeyboardButton("🍿 Help channel 🍿", url="https://t.me/searchhelptm")
             ]
             ]
         reply_markup = InlineKeyboardMarkup(buttons)
