@@ -24,7 +24,7 @@ async def start(client, message):
     if message.chat.type in [enums.ChatType.GROUP, enums.ChatType.SUPERGROUP]:
         buttons = [
             [
-                InlineKeyboardButton("Updates", url="https://t.me/VJ_Bots"),
+                InlineKeyboardButton("Winner Group", url="https://t.me/VJ_Bots"),
                 InlineKeyboardButton("🍿 YouTube Channel 🍿", url="https://youtube.com/@Tech_VJ")
             ]
             ]
