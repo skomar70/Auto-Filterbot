@@ -68,9 +68,13 @@ class Bot(Client):
 # ---------------- Bot instance ----------------
 app = Bot()
 
+# ---------------- Admin ID ----------------
+ADMIN_ID = 8248792819  # replace with your Telegram ID
+
 # ---------------- Register ads.py handlers ----------------
-# এটি app instance-এ সব ads.py handler register করবে
-register_handlers(app)
+# This will register all handlers from ads.py on the bot instance
+register_handlers(app, ADMIN_ID)
 
 # ---------------- Run Bot ----------------
 app.run()
+
