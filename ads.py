@@ -11,7 +11,6 @@ ADMIN_ID = 123456789  # আপনার Telegram ID
 DATA_FILE = "bot_data.json"
 VERIFICATION_EXPIRY = 3600  # 1 ঘণ্টা
 
-# ---------------- Helper functions ----------------
 def load_data():
     try:
         with open(DATA_FILE, "r") as f:
@@ -29,11 +28,8 @@ def save_data(data):
 
 data = load_data()
 
-# ---------------- Handler registration ----------------
 def register_handlers(bot):
-    """
-    Register all message and callback handlers on the given Bot instance
-    """
+    """Register all message and callback handlers on the given Bot instance"""
 
     @bot.on_message(filters.command("set_url") & filters.user(ADMIN_ID))
     async def set_url(client, message):
@@ -115,4 +111,4 @@ def register_handlers(bot):
             await callback_query.message.reply_text(data["earn_money_url"])
 
         elif callback_query.data == "cancel":
-            await callback_query.message.edit_text("❌ Verification cancelled. You can try again anytime.")            
+            await callback_query.message.edit_text("❌ Verification cancelled. You can try again anytime.")
