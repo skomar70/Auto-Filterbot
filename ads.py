@@ -4,6 +4,10 @@ import time
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
+# ---------------- Admin ID ----------------
+ADMIN_ID = 123456789  # আপনার Telegram ID
+
+# ---------------- Configuration ----------------
 DATA_FILE = "bot_data.json"
 VERIFICATION_EXPIRY = 3600  # 1 ঘণ্টা
 
@@ -26,7 +30,7 @@ def save_data(data):
 data = load_data()
 
 # ---------------- Handler registration ----------------
-def register_handlers(bot, ADMIN_ID):
+def register_handlers(bot):
     """
     Register all message and callback handlers on the given Bot instance
     """
@@ -111,4 +115,4 @@ def register_handlers(bot, ADMIN_ID):
             await callback_query.message.reply_text(data["earn_money_url"])
 
         elif callback_query.data == "cancel":
-            await callback_query.message.edit_text("❌ Verification cancelled. You can try again anytime.")
+            await callback_query.message.edit_text("❌ Verification cancelled. You can try again anytime.")            
