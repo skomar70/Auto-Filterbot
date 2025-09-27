@@ -1,7 +1,8 @@
 import re
 from os import environ
 
-id_pattern = re.compile(r'^.\d+$')
+id_pattern = re.compile(r'^-?\d+$')
+
 def is_enabled(value, default):
     if value.lower() in ["true", "yes", "1", "enable", "y"]:
         return True
@@ -38,28 +39,48 @@ COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 # FSUB
 auth_channel = environ.get('AUTH_CHANNEL', '')
 AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
-# Set to False inside the bracket if you don't want to use Request Channel else set it to Channel ID
-REQ_CHANNEL = environ.get("REQ_CHANNEL", '-1002926169752')
-REQ_CHANNEL = int(REQ_CHANNEL) if REQ_CHANNEL and id_pattern.search(REQ_CHANNEL) else False
+
+REQ_CHANNEL_ENV = environ.get("REQ_CHANNEL", '-1002926169752')
+REQ_CHANNEL = int(REQ_CHANNEL_ENV) if REQ_CHANNEL_ENV and id_pattern.search(REQ_CHANNEL_ENV) else False
+
 JOIN_REQS_DB = environ.get("JOIN_REQS_DB", DATABASE_URI)
 
 # Others
-LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002965828075'))
-SUPPORT_CHAT = environ.get('SUPPORT_CHAT', '-1002674684447')
-P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "True")), False)
-IMDB = is_enabled((environ.get('IMDB', "False")), True)
-SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "True")), False)
-CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", """<b>ɴᴀᴍᴇ: <code>{file_name}</code> \n\nJᴏɪɴ Nᴏᴡ: [⚡Join channel⚡](https://t.me/searchhelptm)</b>""")
+LOG_CHANNEL_ENV = environ.get('LOG_CHANNEL', '-1002965828075')
+LOG_CHANNEL = int(LOG_CHANNEL_ENV) if LOG_CHANNEL_ENV and id_pattern.search(LOG_CHANNEL_ENV) else None
+
+SUPPORT_CHAT_ENV = environ.get('SUPPORT_CHAT', '-1002674684447')
+SUPPORT_CHAT = int(SUPPORT_CHAT_ENV) if SUPPORT_CHAT_ENV and id_pattern.search(SUPPORT_CHAT_ENV) else None
+
+P_TTI_SHOW_OFF = is_enabled(environ.get('P_TTI_SHOW_OFF', "True"), False)
+IMDB = is_enabled(environ.get('IMDB', "False"), True)
+SINGLE_BUTTON = is_enabled(environ.get('SINGLE_BUTTON', "True"), False)
+
+CUSTOM_FILE_CAPTION = environ.get(
+    "CUSTOM_FILE_CAPTION",
+    """<b>ɴᴀᴍᴇ: <code>{file_name}</code> \n\nJᴏɪɴ Nᴏᴡ: [⚡Join channel⚡](https://t.me/searchhelptm)</b>"""
+)
 BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
-IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", "<b>Query: {query}</b> \n‌‌‌‌IMDb Data:\n\n🏷 Title: <a href={url}>{title}</a>\n🎭 Genres: {genres}\n📆 Year: <a href={url}/releaseinfo>{year}</a>\n🌟 Rating: <a href={url}/ratings>{rating}</a> / 10")
+
+IMDB_TEMPLATE = environ.get(
+    "IMDB_TEMPLATE",
+    "<b>Query: {query}</b> \n‌‌‌‌IMDb Data:\n\n🏷 Title: <a href={url}>{title}</a>\n🎭 Genres: {genres}\n📆 Year: <a href={url}/releaseinfo>{year}</a>\n🌟 Rating: <a href={url}/ratings>{rating}</a> / 10"
+)
+
 LONG_IMDB_DESCRIPTION = is_enabled(environ.get("LONG_IMDB_DESCRIPTION", "False"), False)
 SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "False"), True)
 MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
-INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
-FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '-1003086003339')).split()]
-MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "False")), True)
-PROTECT_CONTENT = is_enabled((environ.get('PROTECT_CONTENT', "False")), False)
-PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "True")), True)
+
+INDEX_REQ_CHANNEL_ENV = environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL)
+INDEX_REQ_CHANNEL = int(INDEX_REQ_CHANNEL_ENV) if INDEX_REQ_CHANNEL_ENV and id_pattern.search(str(INDEX_REQ_CHANNEL_ENV)) else LOG_CHANNEL
+
+FILE_STORE_CHANNEL = [
+    int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '-1003086003339')).split()
+]
+
+MELCOW_NEW_USERS = is_enabled(environ.get('MELCOW_NEW_USERS', "False"), True)
+PROTECT_CONTENT = is_enabled(environ.get('PROTECT_CONTENT', "False"), False)
+PUBLIC_FILE_STORE = is_enabled(environ.get('PUBLIC_FILE_STORE', "True"), True)
 
 LOG_STR = "Current Cusomized Configurations are:-\n"
 LOG_STR += ("IMDB Results are enabled, Bot will be showing imdb details for you queries.\n" if IMDB else "IMBD Results are disabled.\n")
