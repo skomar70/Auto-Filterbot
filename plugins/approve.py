@@ -1,13 +1,13 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pymongo import MongoClient
-from info import ADMINS, VERIFY_LINK, MONGO_URI, DATABASE("Cluster0")
+from info import ADMINS, VERIFY_LINK, MONGO_URI, DATABASE
 
 # ==========================
 # MongoDB Collections
 # ==========================
 client = MongoClient(MONGO_URI)
-db = client.get_database(DATABASE_NAME)
+db = client.get_database(DATABASE)
 
 users = db["users"]
 files = db["files"]
@@ -40,7 +40,7 @@ def register_handlers(self):
     # --------------------------
     # /earn Command
     # --------------------------
-    @app.on_message(filters.command("earn"))
+    @self.on_message(filters.command("earn"))
     async def earn(client, message):
         user_id = message.from_user.id
         if not users.find_one({"user_id": user_id}):
@@ -54,7 +54,7 @@ def register_handlers(self):
     # --------------------------
     # File view callback
     # --------------------------
-    @app.on_callback_query(filters.regex(r"^view_file_"))
+    @self.on_callback_query(filters.regex(r"^view_file_"))
     async def view_file(client, callback_query):
         user_id = callback_query.from_user.id
         file_id = callback_query.data.split("_")[-1]
@@ -72,7 +72,7 @@ def register_handlers(self):
     # --------------------------
     # Admin Commands: set_url / reset_url
     # --------------------------
-    @app.on_message(filters.command("set_url") & filters.user(ADMINS))
+    @self.on_message(filters.command("set_url") & filters.user(ADMINS))
     async def set_url(client, message):
         if len(message.command) < 2:
             return await message.reply_text("Usage: /set_url https://example.com")
@@ -84,7 +84,7 @@ def register_handlers(self):
         )
         await message.reply_text(f"✅ Verify URL set to:\n{new_url}")
 
-    @app.on_message(filters.command("reset_url") & filters.user(ADMINS))
+    @self.on_message(filters.command("reset_url") & filters.user(ADMINS))
     async def reset_url(client, message):
         settings.update_one(
             {"_id": "links"},
