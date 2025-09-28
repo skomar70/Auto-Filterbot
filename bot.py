@@ -16,6 +16,8 @@ from utils import temp
 from typing import Union, Optional, AsyncGenerator
 from pyrogram import types
 
+approve.register_handlers(app)
+
 class Bot(Client):
 
     def __init__(self):
