@@ -1,7 +1,7 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pymongo import MongoClient
-from info import ADMINS, VERIFY_LINK, MONGO_URI, DATABASE_NAME
+from info import ADMINS, VERIFY_LINK, MONGO_URI, DATABASE("Cluster0")
 
 # ==========================
 # MongoDB Collections
