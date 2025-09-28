@@ -7,7 +7,7 @@ from info import MONGO_URI, VERIFY_LINK, ADMINS, DATABASE_NAME, COLLECTION_NAME
 # MongoDB Collections
 # ==========================
 client = MongoClient(MONGO_URI)
-db = client.get_database(DATABASE_NAME)
+db = client.get_database("Cluster0")
 
 users = db["users"]
 files = db[COLLECTION_NAME]  # Environment variable collection
