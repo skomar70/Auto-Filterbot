@@ -92,5 +92,5 @@ async def view_file(client, callback_query):
 # ==========================
 # Run the Bot
 # ==========================
-app = Client("my_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
-app.run()
+#app = Client("my_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
+#app.run()
