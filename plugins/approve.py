@@ -58,7 +58,7 @@ async def reset_url(client, message):
     await message.reply_text("♻️ Verify URL has been reset. Default link will be used.")
 
 # ==========================
-# /start Command
+# /earn Command
 # ==========================
 @Client.on_message(filters.command("start"))
 async def start(client, message):
