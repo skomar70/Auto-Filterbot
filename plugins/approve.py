@@ -1,14 +1,16 @@
-pymongo import MongoClient
-from info import ADMINS, VERIFY_LINK, MONGO_URI, DATABASE("Cluster0")
+from pyrogram import filters
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pymongo import MongoClient
+from info import MONGO_URI, VERIFY_LINK, ADMINS, DATABASE_NAME, COLLECTION_NAME
 
 # ==========================
 # MongoDB Collections
 # ==========================
 client = MongoClient(MONGO_URI)
-db = client.get_('DATABASE_NAME', "Cluster0")
+db = client.get_database(DATABASE_NAME)
 
 users = db["users"]
-files = db["files"]
+files = db[COLLECTION_NAME]  # Environment variable collection
 settings = db["settings"]
 
 # ==========================
@@ -27,4 +29,70 @@ def get_shortlink(user_id=None, file_id=None):
 def earn_money_button(user_id=None, file_id=None):
     """
     Create inline keyboard button for earning money
-    """            
+    """
+    url = get_shortlink(user_id, file_id)
+    return InlineKeyboardMarkup([[InlineKeyboardButton("💰 Earn Money", url=url)]])
+
+# ==========================
+# Register Handlers
+# ==========================
+def register_handlers(self):
+    # --------------------------
+    # /earn Command
+    # --------------------------
+    @self.on_message(filters.command("earn"))
+    async def earn(client, message):
+        user_id = message.from_user.id
+        if not users.find_one({"user_id": user_id}):
+            users.insert_one({"user_id": user_id, "joined": True})
+
+        await message.reply_text(
+            "Welcome! Click below to earn money.",
+            reply_markup=earn_money_button(user_id=user_id)
+        )
+
+    # --------------------------
+    # File view callback
+    # --------------------------
+    @self.on_callback_query(filters.regex(r"^view_file_"))
+    async def view_file(client, callback_query):
+        user_id = callback_query.from_user.id
+        file_id = callback_query.data.split("_")[-1]
+
+        # Ensure proper type for file_id
+        try:
+            file_doc = files.find_one({"file_id": int(file_id)})
+        except ValueError:
+            return await callback_query.answer("Invalid file ID!", show_alert=True)
+
+        if not file_doc:
+            return await callback_query.answer("File not found!", show_alert=True)
+
+        msg_text = f"📄 File: {file_doc['name']}\n📦 Size: {file_doc['size']}"
+        await callback_query.message.edit_text(
+            msg_text,
+            reply_markup=earn_money_button(user_id=user_id, file_id=file_id)
+        )
+
+    # --------------------------
+    # Admin Commands: set_url / reset_url
+    # --------------------------
+    @self.on_message(filters.command("set_url") & filters.user(ADMINS))
+    async def set_url(client, message):
+        if len(message.command) < 2:
+            return await message.reply_text("Usage: /set_url https://example.com")
+        new_url = message.command[1]
+        settings.update_one(
+            {"_id": "links"},
+            {"$set": {"verify_link": new_url}},
+            upsert=True
+        )
+        await message.reply_text(f"✅ Verify URL set to:\n{new_url}")
+
+    @self.on_message(filters.command("reset_url") & filters.user(ADMINS))
+    async def reset_url(client, message):
+        settings.update_one(
+            {"_id": "links"},
+            {"$unset": {"verify_link": ""}}
+        )
+        await message.reply_text("♻️ Verify URL has been reset. Default link will be used.")
