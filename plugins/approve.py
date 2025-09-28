@@ -7,7 +7,7 @@ from info import ADMINS, API_ID, API_HASH, BOT_TOKEN, MONGO_URI, VERIFY_LINK
 # MongoDB Collections
 # ==========================
 client = MongoClient(MONGO_URI)
-db = client.get_database()  # ডিফল্ট DATABASE_URI থেকে ডাটাবেস নেবে
+db = client.get_database("Cluster0")  # ডিফল্ট DATABASE_URI থেকে ডাটাবেস নেবে
 
 users = db["users"]
 files = db["files"]
