@@ -36,6 +36,10 @@ DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://test:hvM1kLeXCCSXXb1u@
 DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
 
+# Aliases for backwards compatibility
+MONGO_URI = DATABASE_URI
+VERIFY_LINK = environ.get('VERIFY_LINK', 'https://t.me/your_channel')
+
 # FSUB
 auth_channel = environ.get('AUTH_CHANNEL', '')
 AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
