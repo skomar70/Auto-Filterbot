@@ -36,7 +36,7 @@ def earn_money_button(user_id=None, file_id=None):
 # ==========================
 # Register Handlers
 # ==========================
-def register_handlers(app):
+def register_handlers(self):
     # --------------------------
     # /earn Command
     # --------------------------
