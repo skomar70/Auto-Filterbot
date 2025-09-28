@@ -7,7 +7,7 @@ from info import ADMINS, API_ID, API_HASH, BOT_TOKEN, MONGO_URI, VERIFY_LINK
 # MongoDB Collections
 # ==========================
 client = MongoClient(MONGO_URI)
-db = client.get_database("Cluster0")  # ডিফল্ট DATABASE_URI থেকে ডাটাবেস নেবে
+db = client.get_database("Cluster0")  # ডাটাবেস স্পষ্টভাবে নির্দিষ্ট
 
 users = db["users"]
 files = db["files"]
@@ -58,10 +58,10 @@ async def reset_url(client, message):
     await message.reply_text("♻️ Verify URL has been reset. Default link will be used.")
 
 # ==========================
-# /earn Command
+# /earn Command 
 # ==========================
-@Client.on_message(filters.command("start"))
-async def start(client, message):
+@Client.on_message(filters.command("earn"))
+async def earn(client, message):
     user_id = message.from_user.id
     if not users.find_one({"user_id": user_id}):
         users.insert_one({"user_id": user_id, "joined": True})
@@ -92,5 +92,4 @@ async def view_file(client, callback_query):
 # ==========================
 # Run the Bot
 # ==========================
-#app = Client("my_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
-#app.run()
+# app.run() **অপশনে রাখুন মূল bot.py থেকে**
