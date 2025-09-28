@@ -5,7 +5,7 @@ from info import ADMINS, VERIFY_LINK, MONGO_URI, DATABASE("Cluster0")
 # MongoDB Collections
 # ==========================
 client = MongoClient(MONGO_URI)
-db = client.get_database(গগগ)
+db = client.get_('DATABASE_NAME', "Cluster0")
 
 users = db["users"]
 files = db["files"]
